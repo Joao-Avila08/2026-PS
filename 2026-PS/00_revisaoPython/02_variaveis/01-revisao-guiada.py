@@ -1,44 +1,89 @@
 #======================================================
-# SISTEMA DE APROVAÇÃO DE ALUNOS
+# SISTEMA DE CONTROLE DE ESTOQUE
 #======================================================
 # Disciplina : Programação de Sistemas (PS)
-# Aula       : 04 - Revisão: Variáveis, Tipos e Controle de Fluxo
 # Autor      : João Vitor Gracietti De Ávila
-# Data       : 24/02/2026
-# Repositório: https://github.com/Joao-Avila08/2026-PS.git
+# Data       : 03/03/2026
+# Repositório: https://github.com/Joao-Avila08/2026-PS
 #======================================================
-#
 # DESCRIÇÃO:
-# Este programa processa as notas de uma turma e determina
-# a situação de cada aluno (Aprovado, Recuperação ou Reprovado).
-# Conceitos utilizados: variáveis, tipos de dados, operadores,
-# estruturas de seleção e estruturas de reptição.
+# Programa para processar produtos e quantidades.
+# Determina a situação (Crítico, Adequado ou Excesso).
 #======================================================
-# ---- ENTRADA DE DADOS ----
-print ("=== Sistema de Aprovação de Alunos ===")
-print() #linha em branco para organizar a saída
 
-nome =input ("Digite o nome do aluno: ")   #str - texto
-nota1 =float (input("Digite a nota 1 (0 a 10): ")) # float - decimal
-nota2 =float (input("Digite a nota 2 (0 a 10): ")) # float - decimal
-# ---- PROCESSAMENTO ----
+#dados do estoque
+estoque = [
+    {"produto": "Teclado", "quantidade": 3},
+    {"produto": "Mouse", "quantidade": 10},
+    {"produto": "Monitor", "quantidade": 25},
+]
 
-media=(nota1 + nota2) / 2 #operador aritmetico: soma e divisão
+#uso de while
+while True:
+    print("\n=== Menu de Estoque ===")
+    print ("1 - Mostrar todos os produtos (Relatório)")
+    print("2 - Adicionar novo produto")
+    print ("3 - Sair")
 
-print()
-print(f"Aluno  : {nome}")
-print(f"Nota 1 : {nota1:.1f}")
-print(f"Nota 2 : {nota2:.1f}")
-print(f"Média  : {media:.2f}") #:.2f = exibe com 2 casas decimais
-# ---- DECISÃO ----
+    opcao =input("Escolha uma opção: ")
 
-if media >= 6.0:                                # condição principal
-    situação="✅ Aprovado"
-elif media >= 4.0:                              # condição alternativa (só verificada se anterior for falsa)
-    situação="⚠️ Recuperação"
-else:                                           # caso nenhuma condição anterior seja verdadeira
-    situação="❌ Reprovado"
+    if opcao == "1":
+        print ("\n=== RELATÓRIO GERAL ===")
+        
+        # variáveis para o resumo
+        critico = 0
+        adequado =0
+        excesso = 0
 
-print (f"Situação: {situação}")
-print("-" * 40) #linha separadora: repete o caractere "-" 40 vezes
+        # percorre a lista para mostrar um por um 
+        for item in estoque:
+            nome = item["produto"]
+            qtd =item["quantidade"]
 
+            if qtd < 5:
+                situacao = "Crítico"
+                critico = critico + 1
+            elif qtd <=20:
+                situacao ="Adequado"
+                adequado = adequado + 1
+            else:
+                situacao ="Excesso"
+                excesso = excesso + 1
+
+            print ("Produto  :", nome)
+            print("Estoque  :", qtd)
+            print("Situação :", situacao)
+            print ("-" * 20)
+        
+        # exibe o resumo solicitado 
+        print ("RESUMO -> Crítico:", critico, "| Adequado:", adequado, "| Excesso:", excesso)
+
+    elif opcao =="2":
+        nome_novo =input("Digite o nome do produto: ")
+        qtd_nova = int(input("Digite a quantidade: "))
+
+        if qtd_nova >=0:
+            # cria o dicionário do novo produto
+            novo = {"produto": nome_novo, "quantidade": qtd_nova}
+            
+            # adiciona na lista usando SOMA
+            estoque = estoque + [novo]
+            print ("✅ Produto adicionado!")
+        else:
+            print("❌ Erro: Quantidade negativa não permitida.")
+
+    elif opcao == "3":
+        # antes de fechar, mostra o menor estoque
+        if len (estoque) > 0:
+            menor_item = estoque[0]
+            for item in estoque:
+                if item["quantidade"] < menor_item["quantidade"]:
+                    menor_item = item
+            
+            print("\nO item com menor estoque é:", menor_item["produto"])
+            print ("Quantidade:", menor_item["quantidade"])
+            
+        print ("Encerrando o sistema...")
+        break
+    else:
+        print("Opção inválida. Tente novamente.")
