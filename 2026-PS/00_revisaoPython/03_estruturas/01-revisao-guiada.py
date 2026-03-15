@@ -4,7 +4,7 @@
 # Disciplina : Programação de Sistemas (PS)
 # Aula       : 05 - Revisao: Estruturas de Dados
 # Autor      : João Vitor Gracietti De Ávila
-# Data       : 07/03/2026
+# Data       : 05/03/2026
 # Repositório: https://github.com/Joao-Avila08/2026-PS
 #======================================================
 # DESCRIÇÃO:

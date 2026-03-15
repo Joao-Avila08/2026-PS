@@ -9,42 +9,89 @@
 # Repositório: https://github.com/Joao-Avila08/2026-PS.git
 # ==================================================
 
-# ---- BLOCO 1: STDLIB ----
+from conversores import (
+    celsius_para_fahrenheit, celsius_para_kelvin, fahrenheit_para_celsius,
+    km_para_milhas, milhas_para_km, metros_para_pes,
+    kg_para_libras, kg_para_gramas
+)
 
-import math                         # importa o módulo inteiro
-from random import randint, choice  # importa apenas funções específicas
-from datetime import datetime       # importa a classe datetime do módulo datetime
+from utils import cabecalho_secao, formatar_resultado, linha_separadora, validar_numero
 
-print("=== Explorando a Stdlib ===")
 
-print(f"π = {math.pi:.4f}")
-print(f"√2 = {math.sqrt(2):.4f}")
+def menu_temperatura():
 
-print(f"Número aleatório: {randint(1, 100)}")
+    print(cabecalho_secao("Conversão de Temperatura"))
 
-print(f"Unidade sorteada: {choice(['km', 'milhas', 'metros'])}")
+    valor = float(input("  Valor em °C: "))
 
-print(f"Agora: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
-# ---- BLOCO 2: MÓDULO PRÓPRIO ----
+    print(formatar_resultado("°C → °F", valor, "°C",
+    celsius_para_fahrenheit(valor), "°F"))
 
-from conversores import temperatura     # importa o módulo do pacote
+    print(formatar_resultado("°C → K", valor, "°C",
+    celsius_para_kelvin(valor), "K"))
 
-print("\n=== Conversão de Temperatura ===")
 
-valor = 100.0
+def menu_distancia():
 
-print(f"{valor}°C = {temperatura.celsius_para_fahrenheit(valor):.1f}°F")
-print(f"{valor}°C = {temperatura.celsius_para_kelvin(valor):.2f} K")
-print(f"Zero absoluto: {temperatura.ZERO_ABSOLUTO_CELSIUS}°C")
-# ---- BLOCO 3: API LIMPA DO PACOTE ----
-from conversores import km_para_milhas, celsius_para_fahrenheit
-# Funciona porque __init__.py ja expos essas funções
+    print(cabecalho_secao("Conversão de Distância"))
 
-print("\n=== API Limpa ===")
-print(f"100 km = {km_para_milhas (100):.2f}milhas")
-print(f"25°C  = {celsius_para_fahrenheit(25):.lf}°F")
+    valor = float(input("  Valor em km: "))
 
-#----BLOCO 4: CAMADAS----
-from utils import cabecalho_secao, formatar_resultado
-print(cabecalho_secao("Conversões de Distância"))
-print(formatar_resultado("km->mi"100,"km",km_para_milhas(100),"mi"))
+    print(formatar_resultado("km → mi", valor,
+    "km", km_para_milhas(valor), "mi"))
+
+    print(formatar_resultado("km → pés", valor * 1000, "m",
+    metros_para_pes(valor * 1000), "pés"))
+
+
+def menu_massa():
+
+    print(cabecalho_secao("Conversão de Massa"))
+
+    valor_str = input("  Valor em kg: ")
+
+    valido, resultado = validar_numero(valor_str, 0)
+
+    if not valido:
+        print(resultado)
+        return
+
+    kg = resultado
+
+    print(formatar_resultado("kg → lb", kg, "kg",
+    kg_para_libras(kg), "lb"))
+
+    print(formatar_resultado("kg → g", kg, "kg",
+    kg_para_gramas(kg), "g"))
+
+
+def main():
+
+    print(linha_separadora())
+    print("  SISTEMA DE CONVERSÃO DE UNIDADES")
+    print(linha_separadora())
+
+    opcoes = {
+        "1": menu_temperatura,
+        "2": menu_distancia,
+        "3": menu_massa
+    }
+
+    while True:
+
+        print("\n  [1] Temperatura  [2] Distância  [3] Massa  [0] Sair")
+        escolha = input("  Opção: ").strip()
+
+        if escolha == "0":
+            print("\nSistema encerrado.")
+            break
+
+        elif escolha in opcoes:
+            opcoes[escolha]()
+
+        else:
+            print("  Opção inválida.")
+
+
+if __name__ == "__main__":
+    main()
