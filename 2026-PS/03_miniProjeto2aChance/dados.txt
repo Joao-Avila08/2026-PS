@@ -1,0 +1,5 @@
+ING|queijo
+FUNC|luizcalinis|faxineiro geral|100000.0
+FUNC|padilha|comediante|2.0
+VENDA|85.0
+VENDA|67.0
