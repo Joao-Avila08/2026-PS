@@ -45,12 +45,12 @@ class Pet:
             print(f"{self.nome} saiu do hotel")
 
     def calcular_diaria(self):
-        if self.idade < 3:
-            return 50.00
-        elif self.idade < 10:
-            return 60.00
+        if self.idade <= 3:
+            return 1.00
+        elif self.idade <= 10:
+            return 2.00
         else:
-            return 75.00
+            return 3.00
 
     def verificar_vacinacao(self):
         if self.vacinado:
@@ -74,15 +74,15 @@ class Pet:
         print(f"Vacinado:{'Sim' if self.vacinado else 'Não'}")
 
 
-pet1 = Pet("Rex", "Cachorro", 5, "Maria", "Labrador", 22.5, True)
-pet2 = Pet("Mimi", "Gato", 2, "João", "Siamês", 4.2, True)
+pet1 = Pet("yuri magalhoes", "Cachorro", 5, "anthony pagany", "Labrador", 23.5, True)
+pet2 = Pet("Mimi", "Gato", 3, "João", "Siamês", 4.2, True)
 pet3 = Pet("Thor", "Cachorro", 11, "Ana", "Vira-lata", 18.0, False)
 
 pet1.exibir_dados()
 pet1.registrar_entrada()
 pet1.verificar_vacinacao()
 print("Diária:", pet1.calcular_diaria())
-pet1.atualizar_peso(23.0)
+pet1.atualizar_peso(11.0)
 pet1.emitir_resumo()
 
 pet3.exibir_dados()
