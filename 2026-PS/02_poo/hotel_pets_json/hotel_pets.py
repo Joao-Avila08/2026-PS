@@ -1,17 +1,21 @@
 import json
 import os
 
-ARQUIVO_JSON = "pets.json"
+ARQUIVO_JSON = "pets.json" 
+""
 
 
 class Pet:
-    def __init__(self, nome, especie, idade, peso, nome_dono, vacinado, hospedado=False):
+    def __init__(self, nome, especie, idade, peso, nome_dono, vacinado,
+                 altura, data_nascimento, hospedado=False):
         self.nome = nome
         self.especie = especie
         self.idade = idade
         self.peso = peso
         self.nome_dono = nome_dono
         self.vacinado = vacinado
+        self.altura = altura
+        self.data_nascimento = data_nascimento
         self.hospedado = hospedado
 
     def exibir_dados(self):
@@ -20,6 +24,8 @@ class Pet:
         print(f"Espécie: {self.especie}")
         print(f"Idade: {self.idade}")
         print(f"Peso: {self.peso} kg")
+        print(f"Altura: {self.altura}")
+        print(f"Data de nascimento: {self.data_nascimento}")
         print(f"Dono: {self.nome_dono}")
         print(f"Vacinado: {'Sim' if self.vacinado else 'Não'}")
         print(f"Hospedado: {'Sim' if self.hospedado else 'Não'}")
@@ -39,17 +45,13 @@ class Pet:
             print(f"{self.nome} saiu do hotel.")
 
     def para_dicionario(self):
-        """
-        Transforma o objeto Pet em um dicionário.
-
-        Isso é necessário porque o JSON não salva diretamente objetos Python.
-        Ele salva dados simples: textos, números, booleanos, listas e dicionários.
-        """
         return {
             "nome": self.nome,
             "especie": self.especie,
             "idade": self.idade,
             "peso": self.peso,
+            "altura": self.altura,
+            "data_nascimento": self.data_nascimento,
             "nome_dono": self.nome_dono,
             "vacinado": self.vacinado,
             "hospedado": self.hospedado
@@ -57,9 +59,6 @@ class Pet:
 
     @staticmethod
     def criar_de_dicionario(dados):
-        """
-        Cria um objeto Pet a partir de um dicionário carregado do JSON.
-        """
         return Pet(
             dados["nome"],
             dados["especie"],
@@ -67,15 +66,13 @@ class Pet:
             dados["peso"],
             dados["nome_dono"],
             dados["vacinado"],
+            dados["altura"],
+            dados["data_nascimento"],
             dados["hospedado"]
         )
 
 
 def salvar_pets(lista_pets):
-    """
-    Salva a lista de objetos Pet no arquivo pets.json.
-    """
-
     lista_dicionarios = []
 
     for pet in lista_pets:
@@ -88,12 +85,6 @@ def salvar_pets(lista_pets):
 
 
 def carregar_pets():
-    """
-    Carrega os pets do arquivo pets.json.
-
-    Se o arquivo ainda não existir, retorna uma lista vazia.
-    """
-
     if not os.path.exists(ARQUIVO_JSON):
         return []
 
@@ -116,12 +107,16 @@ def cadastrar_pet(lista_pets):
     especie = input("Espécie: ")
     idade = int(input("Idade: "))
     peso = float(input("Peso: "))
+    altura = float(input("Altura: "))
+    data_nascimento = input("Data de nascimento: ")
     nome_dono = input("Nome do dono: ")
 
     resposta = input("O pet está vacinado? (s/n): ").lower()
     vacinado = resposta == "s"
 
-    pet = Pet(nome, especie, idade, peso, nome_dono, vacinado)
+    pet = Pet(nome, especie, idade, peso, nome_dono, vacinado,
+              altura, data_nascimento)
+
     lista_pets.append(pet)
 
     print("Pet cadastrado com sucesso!")
