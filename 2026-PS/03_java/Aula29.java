@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class main{
+public class Main {
 
     public static double calcularMedia(double[] notas) {
         double soma = 0;
@@ -35,6 +35,10 @@ public class main{
     }
 
     public static int maiorValor(int[] valores) {
+        if (valores.length == 0) {
+            throw new IllegalArgumentException("O array não pode estar vazio.");
+        }
+
         int maior = valores[0];
 
         for (int valor : valores) {
@@ -47,11 +51,20 @@ public class main{
     }
 
     public static int maiorValor(int a, int b) {
-        if (a > b) {
-            return a;
+        return (a > b) ? a : b;
+    }
+
+    public static int contarAcimaDaMedia(double[] notas) {
+        double media = calcularMedia(notas);
+        int contador = 0;
+
+        for (double nota : notas) {
+            if (nota > media) {
+                contador++;
+            }
         }
 
-        return b;
+        return contador;
     }
 
     public static void exibirBoletim(double[] notas) {
@@ -62,18 +75,24 @@ public class main{
         System.out.println("Aprovados: " + aprovados);
 
         if (media >= 6.0) {
-            System.out.println("Situação: Aprovada");
+            System.out.println("Situação: APROVADA");
         } else {
-            System.out.println("Situação: Em recuperação");
+            System.out.println("Situação: EM RECUPERAÇÃO");
         }
+
+        System.out.println("Acima da média: " + contarAcimaDaMedia(notas));
     }
 
     public static void main(String[] args) {
         double[] notas = {7.0, 5.0, 9.0, 6.0};
 
+        System.out.println("=== Exercício 1 ===");
         System.out.println("Média = " + calcularMedia(notas));
+
+        System.out.println("\n=== Exercício 2 ===");
         System.out.println("Aprovados = " + contarAprovados(notas));
 
+        System.out.println("\n=== Exercício 3 ===");
         ArrayList<String> produtos = new ArrayList<>();
 
         adicionarProduto(produtos, "Pizza");
@@ -81,9 +100,11 @@ public class main{
 
         listarProdutos(produtos);
 
+        System.out.println("\n=== Exercício 4 ===");
         System.out.println("Maior valor do array: " + maiorValor(new int[]{3, 9, 5}));
         System.out.println("Maior entre dois números: " + maiorValor(12, 7));
 
+        System.out.println("\n=== Exercício 5 ===");
         exibirBoletim(notas);
     }
 }
