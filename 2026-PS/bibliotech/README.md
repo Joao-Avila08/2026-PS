@@ -46,3 +46,10 @@ O BiblioTech é um sistema para ajudar a biblioteca do campus a controlar os liv
 ### Classes
 
 ![Diagrama de classes do BiblioTech](docs/classes.svg)
+
+## 5. Decisão de modelagem: Bibliotecario e Emprestimo
+
+Um bibliotecario pode registrar varios emprestimos, enquanto cada emprestimo e registrado por exatamente um bibliotecario.
+
+A multiplicidade e **1 para 0..***: um bibliotecario pode registrar nenhum ou varios emprestimos, e cada emprestimo deve estar ligado a um unico bibliotecario. Essa relacao permite identificar qual bibliotecario realizou cada registro de emprestimo.
+
