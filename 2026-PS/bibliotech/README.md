@@ -53,3 +53,7 @@ Um bibliotecario pode registrar varios emprestimos, enquanto cada emprestimo e r
 
 A multiplicidade e **1 para 0..***: um bibliotecario pode registrar nenhum ou varios emprestimos, e cada emprestimo deve estar ligado a um unico bibliotecario. Essa relacao permite identificar qual bibliotecario realizou cada registro de emprestimo.
 
+Na classe `Leitor`, o codigo acrescentou dois atributos ao modelo:
+
+- `limiteEmprestimos`: quantidade maxima de livros que o leitor pode pegar emprestado.
+- `livrosEmMaos`: quantidade de livros que o leitor esta com ele no momento.
