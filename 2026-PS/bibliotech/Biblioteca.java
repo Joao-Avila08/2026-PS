@@ -40,6 +40,20 @@ public class Biblioteca {
         }
     }
 
+    public String obterAcervoComoTexto() {
+        if (livros.isEmpty()) {
+            return "Nenhum livro cadastrado.";
+        }
+
+        String texto = "";
+
+        for (int i = 0; i < livros.size(); i++) {
+            texto = texto + livros.get(i) + "\n";
+        }
+
+        return texto;
+    }
+
     public Livro buscarLivro(String titulo) {
         for (Livro livro : livros) {
             if (livro.getTitulo().equals(titulo)) {
