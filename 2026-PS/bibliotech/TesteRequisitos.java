@@ -1,3 +1,4 @@
+
 public class TesteRequisitos {
 
     private static int passou = 0;
@@ -30,9 +31,13 @@ public class TesteRequisitos {
             new Leitor("Ana Lima", "2026011", 2)
         );
 
+        Livro domCasmurro = biblioteca.buscarLivro("Dom Casmurro");
+        Livro capitaes = biblioteca.buscarLivro("Capitaes da Areia");
+        Leitor pedro = biblioteca.buscarLeitor("2026010");
+
         // RF01 — cadastrar e buscar livros
         verificar("RF01 - livro cadastrado encontrado",
-            biblioteca.buscarLivro("Dom Casmurro") != null);
+            domCasmurro != null);
 
         // RF02 — cadastrar e buscar leitores
         verificar("RF02 - leitor cadastrado encontrado",
@@ -40,42 +45,80 @@ public class TesteRequisitos {
 
         // RF03 — disponibilidade e recusas
         verificar("RF03 - livro novo esta disponivel",
-            biblioteca.buscarLivro("Dom Casmurro").estaDisponivel());
+            domCasmurro.estaDisponivel());
 
         verificar("RF03 - livro inexistente nao e encontrado",
             biblioteca.buscarLivro("O Cortico") == null);
 
-        verificar("RF03 - emprestimo de livro inexistente recusado",
-            !biblioteca.emprestar("O Cortico", "2026011"));
+        boolean livroDisponivelAntes = domCasmurro.estaDisponivel();
+        int livrosPedroAntes = pedro.getLivrosEmMaos();
 
-        verificar("RF03 - matricula inexistente recusada",
+        verificar("RF05 - titulo inexistente e recusado",
+            !biblioteca.emprestar("O Cortico", "2026010"));
+
+        verificar("RF05 - recusa por titulo nao muda o livro",
+            domCasmurro.estaDisponivel() == livroDisponivelAntes);
+
+        verificar("RF05 - recusa por titulo nao muda o leitor",
+            pedro.getLivrosEmMaos() == livrosPedroAntes);
+
+        livroDisponivelAntes = capitaes.estaDisponivel();
+        livrosPedroAntes = pedro.getLivrosEmMaos();
+
+        verificar("RF05 - matricula inexistente e recusada",
             !biblioteca.emprestar("Capitaes da Areia", "9999999"));
+
+        verificar("RF05 - recusa por matricula nao muda o livro",
+            capitaes.estaDisponivel() == livroDisponivelAntes);
+
+        verificar("RF05 - recusa por matricula nao muda o leitor",
+            pedro.getLivrosEmMaos() == livrosPedroAntes);
 
         // RF05 — emprestimo e limite do leitor
         verificar("RF05 - primeiro emprestimo aceito",
             biblioteca.emprestar("Dom Casmurro", "2026010"));
 
         verificar("RF05 - livro emprestado fica indisponivel",
-            !biblioteca.buscarLivro("Dom Casmurro").estaDisponivel());
+            !domCasmurro.estaDisponivel());
 
         verificar("RF05 - leitor no limite tem novo emprestimo recusado",
             !biblioteca.emprestar("Capitaes da Areia", "2026010"));
 
         verificar("RF05 - recusa preserva disponibilidade do segundo livro",
-            biblioteca.buscarLivro("Capitaes da Areia").estaDisponivel());
+            capitaes.estaDisponivel());
 
         verificar("RF05 - recusa preserva quantidade de emprestimos do leitor",
-            biblioteca.buscarLeitor("2026010").getLivrosEmMaos() == 1);
+            pedro.getLivrosEmMaos() == 1);
 
         // RF04 — devolucao
         verificar("RF04 - devolucao de livro emprestado aceita",
             biblioteca.devolver("Dom Casmurro"));
 
         verificar("RF04 - livro devolvido fica disponivel",
-            biblioteca.buscarLivro("Dom Casmurro").estaDisponivel());
+            domCasmurro.estaDisponivel());
 
         verificar("RF04 - segunda devolucao e recusada",
             !biblioteca.devolver("Dom Casmurro"));
+
+        // Prazo de devolucao — sete dias apos a retirada
+        Livro livroPrazo = new Livro("Livro do Prazo", "Autor Teste", 2026);
+        Leitor leitorPrazo = new Leitor("Leitor Teste", "2026012", 2);
+        Emprestimo emprestimoPrazo = new Emprestimo(livroPrazo, leitorPrazo);
+
+        boolean emprestimoRealizado = emprestimoPrazo.realizarEmprestimo();
+
+        verificar("Prazo - devolucao prevista 7 dias depois da retirada",
+            emprestimoRealizado
+            && emprestimoPrazo.getDataPrevistaDevolucao() != null
+            && emprestimoPrazo.getDataPrevistaDevolucao().equals(
+                emprestimoPrazo.getDataRetirada().plusDays(7)
+            ));
+
+        verificar("Prazo - data prevista aparece no toString",
+            emprestimoRealizado
+            && emprestimoPrazo.toString().contains(
+                emprestimoPrazo.getDataPrevistaDevolucao().toString()
+            ));
 
         System.out.println();
         System.out.println("=== RESULTADO DOS TESTES ===");

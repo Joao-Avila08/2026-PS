@@ -1,3 +1,4 @@
+
 # BiblioTech
 
 Sistema de empréstimo de livros para a biblioteca do campus.
@@ -51,7 +52,7 @@ O BiblioTech é um sistema para ajudar a biblioteca do campus a controlar os liv
 
 Um bibliotecário pode registrar vários empréstimos, enquanto cada empréstimo é registrado por exatamente um bibliotecário.
 
-A multiplicidade é **1 para 0..\***: um bibliotecário pode registrar nenhum ou vários empréstimos, e cada empréstimo deve estar ligado a um único bibliotecário. Essa relação permite identificar qual bibliotecário realizou cada registro de empréstimo.
+A multiplicidade é **1 para 0..***: um bibliotecário pode registrar nenhum ou vários empréstimos, e cada empréstimo deve estar ligado a um único bibliotecário. Essa relação permite identificar qual bibliotecário realizou cada registro de empréstimo.
 
 Na classe `Leitor`, o código acrescentou dois atributos ao modelo:
 
@@ -64,17 +65,20 @@ A classe `Emprestimo` representa o empréstimo de um livro para um leitor.
 
 Ela mantém referências aos objetos `Livro` e `Leitor`, permitindo relacionar o livro emprestado à pessoa que o recebeu.
 
-A classe também registra as datas de retirada e devolução e controla se o empréstimo está ativo.
+A classe registra as datas de retirada, devolução e devolução prevista, além de controlar se o empréstimo está ativo.
+
+A data prevista de devolução é calculada para sete dias após a retirada, utilizando `LocalDate.plusDays(7)`. Essa data pode ser consultada pelo método `getDataPrevistaDevolucao()` e aparece na representação textual do empréstimo, fornecida por `toString()`.
 
 As principais operações são:
 
 - `realizarEmprestimo()`: verifica se o livro está disponível e se o leitor pode pegar outro livro antes de registrar o empréstimo.
 - `registrarDevolucao()`: registra a devolução e atualiza a disponibilidade do livro e a quantidade de livros com o leitor.
 - `estaAtivo()`: informa se o empréstimo continua ativo.
+- `getDataPrevistaDevolucao()`: retorna a data prevista para a devolução.
 
 O método `realizarEmprestimo()` impede empréstimos inválidos sem alterar os dados do livro ou do leitor. Já `registrarDevolucao()` verifica se o empréstimo está ativo, evitando que uma segunda devolução altere os dados novamente.
 
-A classe `TesteEmprestimo` verifica essas situações, incluindo empréstimo realizado, livro indisponível, limite de empréstimos e devolução.
+A classe `TesteEmprestimo` verifica situações relacionadas ao empréstimo e à devolução. A classe `TesteRequisitos` também verifica as recusas de operações inválidas, a preservação dos estados e o cálculo do prazo de sete dias.
 
 **Observação:** neste estágio, o empréstimo relaciona diretamente um livro e um leitor. O registro do bibliotecário responsável, descrito na seção 5, ainda não foi implementado na classe `Emprestimo`.
 
@@ -150,13 +154,13 @@ As regras de negócio continuam sendo responsabilidade da biblioteca e das class
 
 ## 9. Testes e verificação do funcionamento
 
-Os testes das classes anteriores continuam fazendo parte do projeto. A classe `TesteBiblioteca` verifica as operações da biblioteca, incluindo empréstimos aceitos e recusados, controle de limites e devoluções.
+A classe `TesteBiblioteca` verifica o funcionamento integrado do sistema, incluindo consultas ao acervo, cadastro e busca de leitores, empréstimos aceitos e recusados, controle do limite de empréstimos e devoluções.
 
-Na Aula 40, o projeto também passou pela compilação com `javac *.java`, sem apresentar mensagens de erro. A execução de `java TesteBiblioteca` apresentou os resultados esperados para os cenários testados, incluindo a recusa de um segundo empréstimo do mesmo livro enquanto ele está emprestado e a recusa de uma segunda devolução.
+A classe `TesteRequisitos` verifica os requisitos funcionais implementados, incluindo a disponibilidade dos livros, as recusas de operações inválidas, a preservação dos dados após recusas e o prazo previsto de devolução.
 
-O código da interface foi conectado aos métodos responsáveis pelas operações da biblioteca. Entretanto, a verificação visual da janela ainda depende da resolução do problema de inicialização do ambiente gráfico.
+A interface gráfica `TelaBiblioteca` foi testada, e os botões de empréstimo, devolução e atualização do acervo funcionaram conforme esperado, atualizando as informações exibidas após as operações.
 
-O projeto possui commits e push registrados no GitHub para as alterações de preparação do ambiente e integração da janela com o acervo e as operações de empréstimo.
+Na última execução de `TesteRequisitos`, foram aprovadas 20 verificações, com 0 falhas.
 
 ## 10. Como executar
 
@@ -186,16 +190,18 @@ A interface requer um ambiente com suporte gráfico.
 | RF02 — Cadastro de leitores | `Biblioteca.cadastrarLeitor()` e `Biblioteca.buscarLeitor()` | `TesteRequisitos`: leitor cadastrado encontrado |
 | RF03 — Consulta de disponibilidade | `Livro.estaDisponivel()` e `Biblioteca.buscarLivro()` | `TesteRequisitos`: disponibilidade inicial e livro inexistente |
 | RF04 — Devolução de livros | `Biblioteca.devolver()` e `Emprestimo.registrarDevolucao()` | `TesteRequisitos`: devolução aceita, livro disponível e segunda devolução recusada |
-| RF05 — Empréstimo de livros | `Biblioteca.emprestar()` e `Emprestimo.realizarEmprestimo()` | `TesteRequisitos`: empréstimo aceito, indisponibilidade e respeito ao limite |
+| RF05 — Empréstimo de livros | `Biblioteca.emprestar()` e `Emprestimo.realizarEmprestimo()` | `TesteRequisitos`: empréstimo aceito, indisponibilidade, recusas e respeito ao limite |
 | RF06 — Reserva de livros | Ainda não implementado | Não há teste de reserva |
 
 Os testes também verificam recusas para livro inexistente, matrícula inexistente e leitor que atingiu o limite de empréstimos, incluindo a preservação do estado dos objetos após as recusas.
 
-Na última execução de `TesteRequisitos`, foram aprovadas 14 verificações, com 0 falhas.
+A classe `TesteRequisitos` verifica ainda se a data prevista de devolução corresponde a sete dias após a retirada e se essa data aparece no método `toString()`.
+
+Na última execução de `TesteRequisitos`, foram aprovadas **20 verificações, com 0 falhas**.
 
 ## 12. O que ainda não faz
 
-- **HU05 — Empréstimos atrasados:** o sistema registra as datas de retirada e devolução, mas ainda não identifica automaticamente empréstimos atrasados.
+- **HU05 — Empréstimos atrasados:** o sistema registra as datas de retirada e devolução prevista, mas ainda não identifica automaticamente os empréstimos atrasados.
 - **HU06 / RF06 — Reservas:** o sistema ainda não permite reservar livros indisponíveis.
 - **RNF02 — Controle de acesso:** ainda não há autenticação nem verificação de permissões para garantir que somente bibliotecários alterem o acervo.
 - **Verificação da interface gráfica:** a conexão dos botões foi implementada, mas ainda falta confirmar visualmente o funcionamento completo da janela no ambiente gráfico.
@@ -203,3 +209,20 @@ Na última execução de `TesteRequisitos`, foram aprovadas 14 verificações, c
 ## Uso de inteligência artificial
 
 Utilizei o ChatGPT como apoio na elaboração dos testes de requisitos e na organização da documentação do projeto. Revisei os testes executando-os no ambiente de desenvolvimento para conferir os resultados apresentados.
+
+## 13. Verificações adicionais — Aula 41
+
+A classe `Emprestimo` registra a data da retirada e calcula a data prevista de devolução para sete dias depois, utilizando `LocalDate.plusDays(7)`.
+
+A data prevista pode ser consultada pelo método `getDataPrevistaDevolucao()` e também aparece no método `toString()`.
+
+O arquivo `TesteRequisitos.java` contém 20 verificações, incluindo:
+
+- Recusa de empréstimo para título inexistente.
+- Recusa de empréstimo para matrícula inexistente.
+- Conferência de que o livro e o leitor permanecem inalterados após essas recusas.
+- Verificação do limite de empréstimos do leitor.
+- Verificação da devolução e da disponibilidade do livro.
+- Verificação do prazo de sete dias e da exibição da data prevista.
+
+Resultado da última execução: **20 testes passaram e 0 falharam**.
