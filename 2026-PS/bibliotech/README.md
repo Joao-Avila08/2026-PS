@@ -226,3 +226,45 @@ O arquivo `TesteRequisitos.java` contém 20 verificações, incluindo:
 - Verificação do prazo de sete dias e da exibição da data prevista.
 
 Resultado da última execução: **20 testes passaram e 0 falharam**.
+## 14. Persistência de dados — Aula 42
+
+O BiblioTech utiliza MariaDB para armazenar os livros de forma persistente, mantendo os registros mesmo depois que o programa Java é encerrado.
+
+### Banco de dados
+
+O banco utilizado é `bibliotech`, com a tabela `livros`, que possui os seguintes campos:
+
+- `id`: identificador único gerado automaticamente.
+- `titulo`: título do livro.
+- `autor`: nome do autor.
+- `ano`: ano de publicação.
+
+### Conexão JDBC
+
+A classe `Conexao` estabelece a conexão entre Java e MariaDB utilizando o driver JDBC. As credenciais são obtidas pelas variáveis de ambiente `DB_USER` e `DB_PASSWORD`, evitando deixar a senha diretamente no código.
+
+### Operações de persistência
+
+A classe `LivroDAO` realiza as operações no banco de dados:
+
+- `adicionarLivro()`: cadastra um livro.
+- `atualizarLivro()`: atualiza os dados de um livro.
+- `excluirLivro()`: remove um livro.
+
+As operações utilizam consultas preparadas (`PreparedStatement`) e retornam `true` quando algum registro é afetado e `false` quando nenhum registro é alterado ou ocorre uma falha.
+
+### Testes realizados
+
+A classe `TesteConexao` verifica a conexão com o banco. A classe `TesteLivroDAO` verifica a inclusão, a atualização e a exclusão de livros, além de testar operações com identificadores inexistentes.
+
+Nos testes realizados, os três livros foram inseridos com sucesso. Em seguida, o título de um livro foi atualizado, outro foi excluído e as operações com o identificador `999999` retornaram `false`. A consulta final confirmou que os dois livros restantes continuaram armazenados após o encerramento do programa Java.
+
+### Como executar os testes
+
+Na pasta `bibliotech`, configure as credenciais no terminal:
+
+```bash
+export DB_USER=bibliotech
+read -rs -p "Senha do banco: " DB_PASSWORD
+echo
+export DB_PASSWORD
