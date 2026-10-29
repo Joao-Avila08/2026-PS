@@ -268,3 +268,14 @@ export DB_USER=bibliotech
 read -rs -p "Senha do banco: " DB_PASSWORD
 echo
 export DB_PASSWORD
+```
+### Consultas de livros — Aula 43
+A classe `Livro` agora possui o atributo `id`, além dos métodos `getId()` e `setId()`.
+
+A classe `LivroDAO` possui os métodos:
+- `listarLivros()`: retorna uma lista de objetos Livro.
+- `buscarLivroPorId(int id)`: busca um livro pelo identificador.
+
+Os testes `TesteListarLivros` e `TesteBuscarLivro` verificam a listagem, a busca por ID existente e o tratamento de IDs inexistentes.
+
+As evidências estão na pasta `evidencias`.
